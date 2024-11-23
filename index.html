@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hindi Jokes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>😂😜 Joke Generator</h1>
+  </header>
+
+  <main>
+    <div id="joke-box">
+      <p id="joke">यहाँ मजेदार चुटकुले आएंगे!</p>
+    </div>
+    <button onclick="fetchJoke()">Get a Next Joke</button>
+  </main>
+
+  <footer>
+    <p class=rajan>Made with ❤️ by Rajan   2024  Funny Hindi jokes | All Rights Reserved</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+<style>
+/* Global Styles */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #121212, #1e1e1e);
+  color: white;
+}
+
+/* Header */
+header {
+  background-color: #333;
+  padding: 15px 0;
+  color: white;
+  animation: slide-down 1s ease-out;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 32px; /* Text size increased */
+}
+
+/* Joke Box */
+#joke-box {
+  border: 3px solid #4caf50; /* Border thickness increased */
+  padding: 30px; /* Padding increased */
+  margin: 30px auto;
+  width: 70%; /* Width increased */
+  border-radius: 15px; /* Rounded corners */
+  background: #1e1e1e;
+  animation: fade-in 2s ease-in-out;
+}
+
+#joke {
+  font-size: 22px; /* Font size increased */
+  line-height: 1.6; /* Better line spacing */
+}
+
+/* Button */
+button {
+  background-color: #4caf50;
+  color: white;
+  font-size: 18px; /* Text size increased */
+  padding: 12px 25px; /* Padding increased */
+  border: none;
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer;
+  animation: bounce 2s infinite;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Footer */
+footer {
+   background-color: #333;
+  padding: 15px 0;
+  color: #bbb;
+  font-size: 16px;
+  text-align: center;
+  width: 100%;
+  margin-top: auto; /* Ensures footer stays at the bottom */
+  animation: slide-up 1s ease-out;
+}
+ 
+
+/* Animations */
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+</style>
+
+<script>
+const API_KEY = "4d7f3ef35f7325cbc45d363cfeae"; // Provided API key
+const API_URL = "https://hindi-jokes-api.onrender.com/jokes";
+
+async function fetchJoke() {
+  const jokeElement = document.getElementById("joke");
+  jokeElement.style.animation = "none"; // Reset animation
+  try {
+    const response = await fetch(`${API_URL}?api_key=${API_KEY}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch joke. Please try again later.");
+    }
+    const data = await response.json();
+    jokeElement.innerText = data.jokeContent || "चुटकुला लाने में समस्या हुई!";
+  } catch (error) {
+    jokeElement.innerText = "चुटकुला लाने में समस्या हुई!";
+    console.error(error);
+  }
+  // Add fade-in animation after updating the text
+  setTimeout(() => {
+    jokeElement.style.animation = "fade-in 2s ease-in-out";
+  }, 100);
+}
+(function () {
+  "use strict";
+
+  // Prevent XSS Attacks by sanitizing user inputs
+  function sanitizeInput(input) {
+    const tempDiv = document.createElement("div");
+    tempDiv.textContent = input;
+    return tempDiv.innerHTML;
+  }
+
+  // Example: Sanitize all input fields automatically
+  const inputs = document.querySelectorAll("input, textarea");
+  inputs.forEach(input => {
+    input.addEventListener("input", (e) => {
+      e.target.value = sanitizeInput(e.target.value);
+    });
+  });
+
+  // Disable right-click to prevent unauthorized access
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    console.warn("Right-click is disabled to enhance security.");
+  });
+
+  // Prevent debugging tools (like F12/DevTools)
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+      e.preventDefault();
+      console.warn("Developer tools are disabled.");
+    }
+  });
+
+  // Monitor DOM changes for suspicious activity
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.addedNodes.length > 0) {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === 1 && node.tagName === "SCRIPT") {
+            console.error("Unauthorized script detected and removed!");
+            node.remove();
+          }
+        });
+      }
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // Secure cookies
+  document.cookie = "SecureCookie=SecureValue; Secure; HttpOnly; SameSite=Strict";
+
+  console.log("Basic security measures are active on this website.");
+})();
+
+</script>
